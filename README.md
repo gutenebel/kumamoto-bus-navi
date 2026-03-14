@@ -35,5 +35,8 @@
 - `index.html`: アプリ本体
 - `data/`: 統合済みGTFSデータ（stops.txt, routes.txt, trips.txt, stop_times.txt, calendar.txt）
 
+## 初公開日
+- 2026/3/14
+
 ---
 © 2026 gute.nebel
