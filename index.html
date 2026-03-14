@@ -42,7 +42,7 @@
         .bus-dest { font-size: 0.95em; font-weight: bold; }
         .map-link { color: var(--accent); border: 1px solid var(--accent); padding: 6px 12px; border-radius: 18px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
 
-        /* 停車駅リストのデザイン（ご要望の修正箇所） */
+        /* 停車駅リストのデザイン */
         .route-stop-item { display: flex; align-items: center; padding: 8px 0; color: #333; position: relative; }
         .route-stop-item.passed { color: #aaa; }
         .route-stop-item.current { font-weight: bold; color: var(--primary); }
@@ -52,32 +52,32 @@
         /* 縦線と丸のコンテナ */
         .stop-visual { width: 40px; display: flex; flex-direction: column; align-items: center; position: relative; align-self: stretch; }
         
-        /* 丸の基本スタイル */
+        /* 丸の基本スタイル（白抜き） */
         .stop-dot { width: 10px; height: 10px; border-radius: 50%; z-index: 2; background: white; border: 2px solid var(--accent); margin-top: 6px; }
         
-        /* 1) 始点：グレーの丸 */
-        .route-stop-item.is-first .stop-dot { border-color: var(--passed); width: 8px; height: 8px; }
+        /* 通過済みおよび始点：グレーの白抜き丸に統一 */
+        .route-stop-item.passed .stop-dot,
+        .route-stop-item.is-first .stop-dot { border-color: var(--passed); }
         
-        /* 4) 終点：赤の丸 */
-        .route-stop-item.is-last .stop-dot { background: var(--accent); width: 10px; height: 10px; }
+        /* 終点：赤の塗りつぶし丸 */
+        .route-stop-item.is-last .stop-dot { background: var(--accent); }
         
-        /* 縦線の描画（擬似要素） */
+        /* 縦線 */
         .stop-visual::after {
             content: '';
             position: absolute;
-            top: 15px; /* 丸の下から開始 */
-            bottom: -8px; /* 次のアイテムまで伸ばす */
+            top: 15px;
+            bottom: -8px;
             width: 3px;
             z-index: 1;
         }
         
-        /* 2) 走行済み：灰色の実線 */
+        /* 走行済み：灰色の実線 */
         .route-stop-item.passed .stop-visual::after { background: var(--passed); }
         
-        /* 3) 未走行：赤の実線 */
+        /* 未走行：赤の実線 */
         .route-stop-item:not(.passed) .stop-visual::after { background: var(--accent); }
         
-        /* 最後の駅は線を表示しない */
         .route-stop-item.is-last .stop-visual::after { display: none; }
 
         #back-to-list { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1005; background: var(--primary); color: white; padding: 12px 24px; border-radius: 30px; border: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; }
@@ -156,7 +156,7 @@
             }
             renderAllStops(); 
         } catch (e) {
-            alert("データの読み込みに失敗しました。dataフォルダ内に統合ファイルがあるか確認してください。");
+            alert("データの読み込みに失敗しました。");
         }
         document.getElementById('loader').style.display = 'none';
         
@@ -264,15 +264,14 @@
                 ptsFuture.push(latlng);
             }
 
-            // 地図上のマーカー描画（リストと色を合わせる）
+            // 地図上のマーカー（リストと整合性をとる）
             L.circleMarker(latlng, { 
                 radius: isCurrent ? 8 : (isFirst || isLast) ? 6 : 4, 
-                fillColor: isPassed ? "#ccc" : isFirst ? "#fff" : "var(--accent)", 
-                color: isPassed ? "#999" : (isFirst && !isPassed) ? "#999" : "#fff",
+                fillColor: (isPassed || isFirst) ? "#fff" : "var(--accent)", 
+                color: (isPassed || isFirst) ? "#999" : "#fff",
                 weight: 2, fillOpacity: 1 
             }).addTo(routeLayers);
 
-            // リスト用HTML生成（クラスを付与してデザインを制御）
             listHtml += `
                 <div class="route-stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''} ${isFirst ? 'is-first' : ''} ${isLast ? 'is-last' : ''}">
                     <div class="stop-time-sm">${s.departure_time}</div>
