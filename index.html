@@ -314,16 +314,41 @@
     };
 </script>
 
-<div id="disclaimer-area" style="position: fixed; bottom: 0; width: 100%; z-index: 2000; background: rgba(240, 240, 240, 0.9); font-size: 10px; color: #666; text-align: center; cursor: pointer; transition: all 0.3s ease;">
-    <div id="disclaimer-trigger" style="padding: 5px;">ℹ️データ提供元・免責事項について</div>
-    <div id="disclaimer-content" style="display: none; padding: 10px; border-top: 1px solid #ddd;">
-	データ提供：バスきたくまさん(https://km.bus-vision.jp/kumamoto/view/opendataKuma.html)<br>
-	バス事業者：産交バス(https://www.kyusanko.co.jp/sankobus)、熊本電鉄バス(https://www.kumamotodentetsu.co.jp/bus)、熊本バス(https://www.kuma-bus.co.jp)、熊本都市バス(https://www.kumamoto-toshibus.co.jp)<br>
-	ライセンス：クリエイティブ・コモンズ 表示 4.0 国際<br>
-	本アプリは非公式の個人開発ツールです。正確な運行情報は各社公式HPを確認してください。<br>
-	© 2026 gute.nebel
+
+<div id="disclaimer-area" style="position: fixed; bottom: 0; width: 100%; z-index: 2000; background: rgba(255, 255, 255, 0.9); font-size: 11px; color: #555; text-align: center; cursor: pointer; border-top: 1px solid #ddd; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);">
+    <div id="disclaimer-trigger" style="padding: 8px; font-weight: bold;">
+        ℹ️ データ提供元・免責事項について（タップで開閉）
+    </div>
+    <div id="disclaimer-content" style="display: none; padding: 15px; background: #fff; text-align: left; line-height: 1.6; border-top: 1px solid #eee;">
+        <strong>【データ提供】</strong><br>
+        バスきたくまさん (https://km.bus-vision.jp/kumamoto/view/opendataKuma.html)<br><br>
+        <strong>【バス事業者】</strong>（※バスきたくまさん掲載順）<br>
+	産交バス(https://www.kyusanko.co.jp/sankobus)<br>
+	熊本電鉄バス(https://www.kumamotodentetsu.co.jp/bus)<br>
+	熊本バス(https://www.kuma-bus.co.jp)<br>
+	熊本都市バス(https://www.kumamoto-toshibus.co.jp)<br><br>
+        <strong>【免責事項】</strong><br>
+        本アプリは個人が開発した非公式ツールです。<br>
+	データ更新のタイミング等により実際の運行状況と異なる場合があります。<br>
+	本サービスの利用により生じた損害について、開発者は一切の責任を負いません。<br>
+	正確な情報は各社公式HPを確認してください。<br><br>
+        © 2026 gute.nebel
     </div>
 </div>
+
+<script>
+    // クリックイベントを確実に拾うための設定
+    document.getElementById('disclaimer-area').addEventListener('click', function(e) {
+        const content = document.getElementById('disclaimer-content');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            this.style.background = '#fff'; // 開いている時は背景を白に
+        } else {
+            content.style.display = 'none';
+            this.style.background = 'rgba(255, 255, 255, 0.9)';
+        }
+    });
+</script>
 
 </body>
 </html>
