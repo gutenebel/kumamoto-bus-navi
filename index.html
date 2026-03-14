@@ -182,16 +182,21 @@
         });
     }
 
-    function selectStop(stop) {
+function selectStop(stop) {
         lastSelectedStop = stop;
         stopMarkerLayers.addTo(map);
         const dayMode = document.getElementById('day-select').value;
         const targetTime = document.getElementById('time-select').value;
         const latlng = L.latLng(db.coords[stop.stop_id]);
 
+        // 1. まず地図のコンテナサイズを変更
         document.getElementById('map').style.height = '35vh';
-        map.invalidateSize();
-        map.flyTo(latlng, 17);
+        
+        // 2. 少しだけ遅延させてからLeafletにサイズ変更を通知し、移動させる
+        setTimeout(() => {
+            map.invalidateSize();
+            map.flyTo(latlng, 17);
+        }, 100); // 0.1秒待機（CSSのtransitionとの干渉を防ぐ）
 
         if(currentMarker) map.removeLayer(currentMarker);
         currentMarker = L.marker(latlng).addTo(map);
