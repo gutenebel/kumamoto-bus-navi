@@ -63,7 +63,38 @@
         .route-stop-item:not(.passed) .stop-visual::after { background: var(--accent); }
         .route-stop-item.is-last .stop-visual::after { display: none; }
 
-        #back-to-list { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1005; background: var(--primary); color: white; padding: 12px 24px; border-radius: 30px; border: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; }
+/* 「時刻表リストに戻る」を右下に寄せて重なりを回避 */
+#back-to-list {
+    position: fixed;
+    bottom: 50px; /* 免責事項エリアを避ける高さ */
+    right: 20px;  /* 中央ではなく右側に配置 */
+    left: auto;
+    transform: none;
+    z-index: 1005;
+    background: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: none;
+    font-size: 14px;
+}
+
+/* 更新ボタンのスタイル */
+.refresh-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
         #results { background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-height: 250px; overflow-y: auto; }
         .search-res-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; }
         .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; }
@@ -76,14 +107,15 @@
 <div class="top-nav">
     <div id="search-box"><input type="text" id="stop-search" placeholder="バス停名を入力"></div>
     <div id="results"></div>
-    <div class="schedule-picker">
-        📅 <select id="day-select">
-            <option value="monday">平日</option>
-            <option value="saturday">土曜日</option>
-            <option value="sunday">日曜日・祝日</option>
-        </select>
-        🕒 <input type="time" id="time-select">
-    </div>
+<div class="schedule-picker">
+    📅 <select id="day-select">
+        <option value="monday">平日</option>
+        <option value="saturday">土曜日</option>
+        <option value="sunday">日曜日・祝日</option>
+    </select>
+    🕒 <input type="time" id="time-select">
+    <button class="refresh-btn" onclick="updateTimetable()">更新</button>
+</div>
 </div>
 
 <button class="loc-btn" onclick="goCurrentLocation()">📍</button>
@@ -348,6 +380,18 @@
             this.style.background = 'rgba(255, 255, 255, 0.9)';
         }
     });
+
+// 時刻や曜日を反映して再読み込みする関数
+function updateTimetable() {
+    if (lastSelectedStop) {
+        // 現在のルート表示をクリアして、選択中のバス停の時刻表を再構築
+        routeLayers.clearLayers();
+        selectStop(lastSelectedStop);
+    } else {
+        alert("バス停を選択してください");
+    }
+}
+
 </script>
 
 </body>
